@@ -17,8 +17,8 @@ import {
 import { readJsonSafe } from '@open-mercato/shared/lib/http/readJsonSafe'
 import { findWithDecryption } from '@open-mercato/shared/lib/encryption/find'
 import { CustomerActivity, CustomerDeal, CustomerInteraction } from '../../data/entities'
-import { User } from '@open-mercato/core/modules/auth/data/entities'
 import { activityCreateSchema, activityUpdateSchema } from '../../data/validators'
+import { loadCustomerUserSummaries } from '../../lib/customerUserSummary'
 import { createCustomersCrudOpenApi, createPagedListResponseSchema, defaultOkResponseSchema } from '../openapi'
 import {
   mapInteractionRecordToActivitySummary,
@@ -216,8 +216,8 @@ export async function decorateActivityItems(
     })
   }
 
-  const [users, deals] = await Promise.all([
-    authorIds.length > 0 ? em.find(User, { id: { $in: authorIds } }) : Promise.resolve([]),
+  const [userMap, deals] = await Promise.all([
+    loadCustomerUserSummaries(em, authorIds, decryptionScope),
     dealIds.length > 0 && decryptionScope
       ? findWithDecryption(
           em,
@@ -229,15 +229,6 @@ export async function decorateActivityItems(
       : Promise.resolve([]),
   ])
 
-  const userMap = new Map(
-    users.map((user) => [
-      user.id,
-      {
-        name: user.name ?? null,
-        email: user.email ?? null,
-      },
-    ]),
-  )
   const dealMap = new Map(deals.map((deal) => [deal.id, deal.title]))
 
   return items.map((item) => ({
