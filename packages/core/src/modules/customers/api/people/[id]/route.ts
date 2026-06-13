@@ -390,6 +390,54 @@ async function resolveTodoDetails(
   return details
 }
 
+export async function loadPersonDetailCustomFields(
+  em: EntityManager,
+  person: CustomerEntity,
+  profile: CustomerPersonProfile | null,
+  tenantFallback: string | null,
+  profiler?: RouteProfiler,
+): Promise<Record<string, unknown>> {
+  const entityCustomFieldValues = await loadCustomFieldValues({
+    em,
+    entityId: E.customers.customer_entity,
+    recordIds: [person.id],
+    tenantIdByRecord: { [person.id]: person.tenantId ?? null },
+    organizationIdByRecord: { [person.id]: person.organizationId ?? null },
+    tenantFallbacks: [
+      person.tenantId ?? tenantFallback,
+    ].filter((v): v is string => !!v),
+  })
+  profiler?.mark('entity_custom_fields_loaded', { keys: Object.keys(entityCustomFieldValues?.[person.id] ?? {}).length })
+
+  let profileCustomFieldValues: Record<string, Record<string, unknown>> = {}
+  const profileId = profile?.id ?? null
+  if (profileId) {
+    profileCustomFieldValues = await loadCustomFieldValues({
+      em,
+      entityId: E.customers.customer_person_profile,
+      recordIds: [profileId],
+      tenantIdByRecord: { [profileId]: profile?.tenantId ?? null },
+      organizationIdByRecord: { [profileId]: profile?.organizationId ?? null },
+      tenantFallbacks: [
+        profile?.tenantId ?? person.tenantId ?? tenantFallback,
+      ].filter((v): v is string => !!v),
+    })
+    profiler?.mark('profile_custom_fields_loaded', { keys: Object.keys(profileCustomFieldValues?.[profileId] ?? {}).length })
+  }
+
+  const routing = await resolvePersonCustomFieldRouting(em, person.tenantId ?? null, person.organizationId ?? null)
+  profiler?.mark('custom_field_routing_resolved', { keys: routing.size })
+  const customFields = normalizeCustomerDetailCustomFields(
+    mergePersonCustomFieldValues(
+      routing,
+      entityCustomFieldValues?.[person.id] ?? {},
+      profileId ? profileCustomFieldValues?.[profileId] ?? {} : {},
+    ),
+  )
+  profiler?.mark('custom_fields_merged', { keys: Object.keys(customFields).length })
+  return customFields
+}
+
 export async function GET(_req: Request, ctx: { params?: { id?: string } }) {
   const profiler = createRouteProfiler('customers.people.detail')
   profiler.mark('request_received')
@@ -676,44 +724,7 @@ export async function GET(_req: Request, ctx: { params?: { id?: string } }) {
       profiler.mark('deals_loaded', { count: deals.length })
     }
 
-    const entityCustomFieldValues = await loadCustomFieldValues({
-      em,
-      entityId: E.customers.customer_entity,
-      recordIds: [person.id],
-      tenantIdByRecord: { [person.id]: person.tenantId ?? null },
-      organizationIdByRecord: { [person.id]: person.organizationId ?? null },
-      tenantFallbacks: [
-        person.tenantId ?? auth.tenantId ?? null,
-      ].filter((v): v is string => !!v),
-    })
-    profiler.mark('entity_custom_fields_loaded', { keys: Object.keys(entityCustomFieldValues?.[person.id] ?? {}).length })
-
-    let profileCustomFieldValues: Record<string, Record<string, unknown>> = {}
-    const profileId = profile?.id ?? null
-    if (profileId) {
-      profileCustomFieldValues = await loadCustomFieldValues({
-        em,
-        entityId: E.customers.customer_person_profile,
-        recordIds: [profileId],
-        tenantIdByRecord: { [profileId]: profile?.tenantId ?? null },
-        organizationIdByRecord: { [profileId]: profile?.organizationId ?? null },
-        tenantFallbacks: [
-          profile?.tenantId ?? person.tenantId ?? auth.tenantId ?? null,
-        ].filter((v): v is string => !!v),
-      })
-      profiler.mark('profile_custom_fields_loaded', { keys: Object.keys(profileCustomFieldValues?.[profileId] ?? {}).length })
-    }
-
-    const routing = await resolvePersonCustomFieldRouting(em, person.tenantId ?? null, person.organizationId ?? null)
-    profiler.mark('custom_field_routing_resolved', { keys: routing.size })
-    customFields = normalizeCustomerDetailCustomFields(
-      mergePersonCustomFieldValues(
-        routing,
-        entityCustomFieldValues?.[person.id] ?? {},
-        profileId ? profileCustomFieldValues?.[profileId] ?? {} : {},
-      ),
-    )
-    profiler.mark('custom_fields_merged', { keys: Object.keys(customFields).length })
+    customFields = await loadPersonDetailCustomFields(em, person, profile, auth.tenantId ?? null, profiler)
 
     const viewerUserIdFinal = viewerUserId
     const counts = {

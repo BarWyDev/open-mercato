@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`loadPersonDetailCustomFields merges both entity- and profile-level custom field values 1`] = `
+{
+  "priority": 3,
+  "segment": "enterprise",
+}
+`;
+
+exports[`loadPersonDetailCustomFields merges entity-only custom field values 1`] = `
+{
+  "label": "vip",
+  "priority": 3,
+}
+`;
+
+exports[`loadPersonDetailCustomFields merges profile-only custom field values 1`] = `
+{
+  "segment": "enterprise",
+}
+`;
+
+exports[`loadPersonDetailCustomFields returns an empty object when neither entity nor profile have custom field values 1`] = `{}`;

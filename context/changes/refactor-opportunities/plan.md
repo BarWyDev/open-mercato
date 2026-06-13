@@ -278,11 +278,11 @@ No database schema or data migrations. No deprecation period needed — all thre
 
 #### Automated
 
-- [x] 1.1 New unit test `customerUserSummary.test.ts` passes (multi-user mapping, empty input, missing-user fallback)
-- [x] 1.2 Existing `customers/api/activities/__tests__/*` tests pass
-- [x] 1.3 `yarn workspace @open-mercato/core build` succeeds
-- [x] 1.4 `yarn typecheck` passes
-- [x] 1.5 `yarn lint` passes for touched files
+- [x] 1.1 New unit test `customerUserSummary.test.ts` passes (multi-user mapping, empty input, missing-user fallback) — 5d631ae26
+- [x] 1.2 Existing `customers/api/activities/__tests__/*` tests pass — 5d631ae26
+- [x] 1.3 `yarn workspace @open-mercato/core build` succeeds — 5d631ae26
+- [x] 1.4 `yarn typecheck` passes — 5d631ae26
+- [x] 1.5 `yarn lint` passes for touched files — 5d631ae26
 
 #### Manual
 
@@ -292,14 +292,14 @@ No database schema or data migrations. No deprecation period needed — all thre
 
 #### Automated
 
-- [ ] 2.1 New `loadPersonDetailCustomFields.test.ts` passes with committed baseline snapshots (4 scenarios)
-- [ ] 2.2 `yarn workspace @open-mercato/core build` succeeds
-- [ ] 2.3 `yarn typecheck` passes
-- [ ] 2.4 `yarn lint` passes for touched files
+- [x] 2.1 New `loadPersonDetailCustomFields.test.ts` passes with committed baseline snapshots (4 scenarios)
+- [x] 2.2 `yarn workspace @open-mercato/core build` succeeds
+- [x] 2.3 `yarn typecheck` passes
+- [x] 2.4 `yarn lint` passes for touched files
 
 #### Manual
 
-- [ ] 2.5 Person detail page "Custom attributes" group renders unchanged for entity+profile custom fields
+- [x] 2.5 Person detail page "Custom attributes" group renders unchanged for entity+profile custom fields
 
 ### Phase 3: Extract `usePersonGuardedMutation` hook from `people-v2/[id]/page.tsx` (C5)
 
