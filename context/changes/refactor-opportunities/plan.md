@@ -286,7 +286,7 @@ No database schema or data migrations. No deprecation period needed — all thre
 
 #### Manual
 
-- [x] 1.6 `GET /api/customers/activities` returns decrypted `authorName`/`authorEmail`
+- [x] 1.6 `GET /api/customers/activities` returns decrypted `authorName`/`authorEmail` — ae887fe4f
 
 ### Phase 2: Extract custom-fields helper from `people/[id]/route.ts` (C4)
 
@@ -305,14 +305,14 @@ No database schema or data migrations. No deprecation period needed — all thre
 
 #### Automated
 
-- [x] 3.1 New `usePersonGuardedMutation.optimisticLock.test.tsx` passes (update + delete header cases)
-- [x] 3.2 Existing PR #2055 delete-header test in `page.test.tsx` continues to pass
-- [x] 3.3 `yarn workspace @open-mercato/core build` succeeds
+- [x] 3.1 New `usePersonGuardedMutation.optimisticLock.test.tsx` passes (update + delete header cases) — ae887fe4f
+- [x] 3.2 Existing PR #2055 delete-header test in `page.test.tsx` continues to pass — ae887fe4f
+- [x] 3.3 `yarn workspace @open-mercato/core build` succeeds — ae887fe4f
 - [ ] 3.4 `yarn typecheck` passes — blocked by pre-existing unrelated failure (staff timesheets `staff_time_project` entity-id, confirmed present without this phase's diff)
 - [ ] 3.5 `yarn lint` passes for touched files — blocked by pre-existing repo-wide eslint crash (`eslint-plugin-react` version-detection `TypeError`, reproduces on already-committed files)
 
 #### Manual
 
-- [x] 3.6 Save flow on person detail page unchanged
-- [x] 3.7 Delete flow on person detail page unchanged
-- [x] 3.8 Two-tab conflict bar still renders on second save
+- [x] 3.6 Save flow on person detail page unchanged — ae887fe4f
+- [x] 3.7 Delete flow on person detail page unchanged — ae887fe4f
+- [x] 3.8 Two-tab conflict bar still renders on second save — ae887fe4f
