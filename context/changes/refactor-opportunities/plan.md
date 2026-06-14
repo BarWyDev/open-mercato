@@ -286,33 +286,33 @@ No database schema or data migrations. No deprecation period needed — all thre
 
 #### Manual
 
-- [ ] 1.6 `GET /api/customers/activities` returns decrypted `authorName`/`authorEmail`
+- [x] 1.6 `GET /api/customers/activities` returns decrypted `authorName`/`authorEmail`
 
 ### Phase 2: Extract custom-fields helper from `people/[id]/route.ts` (C4)
 
 #### Automated
 
-- [x] 2.1 New `loadPersonDetailCustomFields.test.ts` passes with committed baseline snapshots (4 scenarios)
-- [x] 2.2 `yarn workspace @open-mercato/core build` succeeds
-- [x] 2.3 `yarn typecheck` passes
-- [x] 2.4 `yarn lint` passes for touched files
+- [x] 2.1 New `loadPersonDetailCustomFields.test.ts` passes with committed baseline snapshots (4 scenarios) — 95cf63c5e
+- [x] 2.2 `yarn workspace @open-mercato/core build` succeeds — 95cf63c5e
+- [x] 2.3 `yarn typecheck` passes — 95cf63c5e
+- [x] 2.4 `yarn lint` passes for touched files — 95cf63c5e
 
 #### Manual
 
-- [x] 2.5 Person detail page "Custom attributes" group renders unchanged for entity+profile custom fields
+- [x] 2.5 Person detail page "Custom attributes" group renders unchanged for entity+profile custom fields — 95cf63c5e
 
 ### Phase 3: Extract `usePersonGuardedMutation` hook from `people-v2/[id]/page.tsx` (C5)
 
 #### Automated
 
-- [ ] 3.1 New `usePersonGuardedMutation.optimisticLock.test.tsx` passes (update + delete header cases)
-- [ ] 3.2 Existing PR #2055 delete-header test in `page.test.tsx` continues to pass
-- [ ] 3.3 `yarn workspace @open-mercato/core build` succeeds
-- [ ] 3.4 `yarn typecheck` passes
-- [ ] 3.5 `yarn lint` passes for touched files
+- [x] 3.1 New `usePersonGuardedMutation.optimisticLock.test.tsx` passes (update + delete header cases)
+- [x] 3.2 Existing PR #2055 delete-header test in `page.test.tsx` continues to pass
+- [x] 3.3 `yarn workspace @open-mercato/core build` succeeds
+- [ ] 3.4 `yarn typecheck` passes — blocked by pre-existing unrelated failure (staff timesheets `staff_time_project` entity-id, confirmed present without this phase's diff)
+- [ ] 3.5 `yarn lint` passes for touched files — blocked by pre-existing repo-wide eslint crash (`eslint-plugin-react` version-detection `TypeError`, reproduces on already-committed files)
 
 #### Manual
 
-- [ ] 3.6 Save flow on person detail page unchanged
-- [ ] 3.7 Delete flow on person detail page unchanged
-- [ ] 3.8 Two-tab conflict bar still renders on second save
+- [x] 3.6 Save flow on person detail page unchanged
+- [x] 3.7 Delete flow on person detail page unchanged
+- [x] 3.8 Two-tab conflict bar still renders on second save
