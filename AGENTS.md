@@ -41,6 +41,7 @@ yarn generate
 yarn build:packages
 yarn typecheck
 yarn lint
+yarn depcruise   # architecture boundary + circular dependency check (packages + apps/mercato)
 yarn test
 yarn build:app
 ```

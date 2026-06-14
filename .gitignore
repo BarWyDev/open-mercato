@@ -56,6 +56,10 @@ yarn-error.log*
 next-env.d.ts
 .tsbuild/
 
+# dependency-cruiser reports
+dependency-report.html
+dependency-graph.mmd
+
 
 # /**/migrations/*
 # Generated module files
